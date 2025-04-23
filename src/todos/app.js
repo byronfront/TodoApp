@@ -1,0 +1,31 @@
+import todoStore from '../store/todo.store';
+import html from './app.html?raw';
+import { renderTodos } from './use-cases';
+
+const ElementIDs = {
+  AddTodoInput: '.new-todo',
+  TodoList: '.todo-list',
+  ClearCompletedButton: '.clear-completed',
+  TodoFilters: '.filtro',
+  PendingCountLabel: '#pending-count'
+};
+
+/**
+ *
+ * @param {String} elementId
+ */
+export const App = (elementId) => {
+
+  const displayTodos = () => {
+    const todos = todoStore.getTodos(todoStore.getCurrentFilter());
+    renderTodos(ElementIDs.TodoList, todos);
+  };
+
+  // Cuando la funcion App() se llama
+  (() => {
+    const app = document.createElement('div');
+    app.innerHTML = html;
+    document.querySelector(elementId).append(app);
+    displayTodos();
+  })();
+}
