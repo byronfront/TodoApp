@@ -9,7 +9,7 @@ const Filters = {
 const state = {
     todos: [
         new Todo('Piedra del alma'),
-        new Todo('Piedra del infinito'),
+        new Todo('Piedra del espacio'),
         new Todo('Piedra del tiempo'),
         new Todo('Piedra del poder'),
         new Todo('Piedra de la realidad'),
@@ -18,12 +18,20 @@ const state = {
 }
 
 const initStore = () => {
-    console.log(state)
+    loadStore();
     console.log('Init Store');
 }
 
 const loadStore = () => {
-    throw new Error('Not implemented');
+    if (!localStorage.getItem('state')) return
+    const {todos = [], filter = Filters.All} = JSON.parse(localStorage.getItem('state'));
+    state.todos = todos;
+    state.filter = filter;
+}
+
+
+const saveStateToLocalStorage = () => {
+    localStorage.setItem('state', JSON.stringify(state))
 }
 
 const getTodos = (filter = Filters.All) => {
@@ -46,7 +54,7 @@ const getTodos = (filter = Filters.All) => {
 const addTodo = (description) => {
     if (!description) throw new Error('Description is required');
     state.todos.push(new Todo(description));
-    throw new Error('Not implemented');
+    saveStateToLocalStorage();
 }
 
 const toggleTodo = (todoId) => {
@@ -56,21 +64,21 @@ const toggleTodo = (todoId) => {
         }
         return todo;
     })
-    throw new Error('Not implemented');
+    saveStateToLocalStorage();
 }
 
 const deleteTodo = (todoId) => {
     state.todos = state.todos.filter(todo => todo.id !== todoId);
-    throw new Error('Not implemented');
+    saveStateToLocalStorage();
 }
 
 const deleteCompleted = () => {
-    state.todos = state.todos.filter(todo => todo.done);
-    throw new Error('Not implemented');
+    state.todos = state.todos.filter(todo => !todo.done);
+    saveStateToLocalStorage();
 }
 const setFilter = (newFilter = Filters.All) => {
     state.filter = newFilter;
-    throw new Error('Not implemented');
+    saveStateToLocalStorage();
 }
 
 const getCurrentFilter = () => {
